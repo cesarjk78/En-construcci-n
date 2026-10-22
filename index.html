@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>goodvet.pe | Página en construcción</title>
+  <style>
+    html, body { height: 100%; margin: 0; overflow: hidden; }
+    body {
+      display: flex; align-items: center; justify-content: center; position: relative;
+      background: radial-gradient(ellipse at 50% 55%, #ffffff 0%, #eaf4ff 100%);
+    }
+    /* Tarjeta al centro, por encima de las burbujas */
+    .card {
+      position: relative; z-index: 2;
+      width: min(92vw, 1100px, 150vh);
+      background: #fff; border-radius: 28px;
+      box-shadow: 0 2px 6px rgba(20,80,160,.08), 0 24px 60px rgba(20,80,160,.18);
+      animation: hover 6s ease-in-out infinite alternate;
+    }
+    .card img {
+      display: block; width: 100%; height: auto;
+      mix-blend-mode: multiply; /* funde el fondo casi blanco de la imagen con la tarjeta */
+      user-select: none; -webkit-user-drag: none;
+    }
+    @keyframes hover { from { transform: translateY(-6px); } to { transform: translateY(6px); } }
+    @media (prefers-reduced-motion: reduce) { .card { animation: none; } }
+    /* Cintas de construcción en dos esquinas */
+    .tape {
+      position: fixed; z-index: 1; width: 300px; height: 32px; pointer-events: none;
+      background: repeating-linear-gradient(-45deg, #ffc61a 0 20px, #0b3f7a 20px 40px);
+      box-shadow: 0 4px 10px rgba(11,63,122,.25);
+      transform: rotate(-45deg);
+    }
+    .tape.tl { top: 46px; left: -78px; }
+    .tape.br { bottom: 46px; right: -78px; }
+    .bubbles { position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+    .b {
+      position: absolute; bottom: -70px; left: var(--l);
+      width: var(--s); height: var(--s);
+      pointer-events: auto; cursor: pointer;
+      animation: rise var(--d) linear infinite; animation-delay: var(--delay);
+    }
+    .i {
+      width: 100%; height: 100%; border-radius: 50%; box-sizing: border-box;
+      background:
+        radial-gradient(circle at 30% 26%, rgba(255,255,255,.95) 0 11%, rgba(255,255,255,0) 12%),
+        radial-gradient(circle at 50% 50%, rgba(140,200,255,.06) 55%, rgba(80,165,255,.32) 100%);
+      border: 1px solid rgba(40,130,230,.28);
+      box-shadow: inset 0 0 10px rgba(255,255,255,.8);
+      filter: blur(var(--blur));
+      animation: sway var(--w) ease-in-out infinite alternate;
+    }
+    .b.pop .i { animation: pop .25s ease-out forwards; }
+    @keyframes rise {
+      0%   { transform: translateY(0); opacity: 0; }
+      8%   { opacity: 1; }
+      90%  { opacity: 1; }
+      100% { transform: translateY(calc(-100vh - 140px)); opacity: 0; }
+    }
+    @keyframes sway { from { transform: translateX(-16px); } to { transform: translateX(16px); } }
+    @keyframes pop  { to { transform: scale(1.7); opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { .bubbles { display: none; } }
+  </style>
+</head>
+<body>
+  <div class="tape tl" aria-hidden="true"></div>
+  <div class="tape br" aria-hidden="true"></div>
+  <div class="card">
+    <img src="Página en construcción.jpg"goodvet.pe - Página en construcción" draggable="false">
+  </div>
+  <div class="bubbles" id="bubbles" aria-hidden="true"></div>
+  <script>
+    const box = document.getElementById('bubbles');
+    const r = (a, b) => a + Math.random() * (b - a);
+    for (let i = 0; i < 18; i++) {
+      const size = r(10, 48);
+      const el = document.createElement('div');
+      el.className = 'b';
+      el.style.cssText =
+        `--l:${r(2, 96).toFixed(1)}%;--s:${size.toFixed(0)}px;` +
+        `--d:${(r(16, 30) - size / 6).toFixed(1)}s;--delay:${(-r(0, 28)).toFixed(1)}s;` +
+        `--w:${r(2.5, 5).toFixed(1)}s;--blur:${size < 16 ? '0.6px' : '0px'}`;
+      el.innerHTML = '<div class="i"></div>';
+      // Tocar o hacer clic revienta la burbuja y vuelve a aparecer después
+      el.addEventListener('pointerdown', () => {
+        el.classList.add('pop');
+        setTimeout(() => el.classList.remove('pop'), 3000);
+      });
+      box.appendChild(el);
+    }
+  </script>
+</body>
+</html>
